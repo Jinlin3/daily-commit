@@ -3,26 +3,34 @@
 // This file defines server actions.
 
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 // Handles the creation of a post.
 export async function createPost(formData: FormData) {
-  await prisma.post.create({
-    data: {
-      title: formData.get("title") as string,
-      slug: (formData.get("title") as string).replace(/\s+/g, "-").toLowerCase(),
-      content: formData.get("content") as string,
-      published: true,
-      author: {
-        connect: {
-          email: "hellojjlin@gmail.com",
-        }
-      },
+  try {
+    await prisma.post.create({
+      data: {
+        title: formData.get("title") as string,
+        slug: (formData.get("title") as string).replace(/\s+/g, "-").toLowerCase(),
+        content: formData.get("content") as string,
+        published: true,
+        author: {
+          connect: {
+            email: "hellojjlin@gmail.com",
+          }
+        },
+      }
+    });
+    // automatically refreshes posts page when this function is ran
+    revalidatePath("/posts");
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+      console.log(
+        `There is a unique constraint violation, a new user cannot be created with this email`
+      );
     }
-  });
-
-  // automatically refreshes posts page when this function is ran
-  revalidatePath("/posts");
+  }
 }
 
 // Handles editing a post. Needs id as an identifier.
