@@ -34,7 +34,7 @@ export async function createPost(formData: FormData) {
       }
     });
     // automatically refreshes posts page when this function is ran
-    revalidatePath("/posts");
+    revalidatePath("/");
   } catch (e) {
     console.error("createPost failed:", e);
   }
@@ -62,5 +62,8 @@ export async function deletePost(formData: FormData) {
       slug
     }
   });
+  // automatically refreshes posts page when this function is ran
+  revalidatePath("/");
+  // redirects to home page
   redirect("/");
 }
