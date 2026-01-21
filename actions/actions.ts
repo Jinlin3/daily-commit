@@ -1,43 +1,75 @@
 "use server";
 
+import { auth } from "@/auth";
 // This file defines server actions.
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+// Utility function to create slugs from titles.
+function makeSlug(title: string) {
+  return title
+    .toLowerCase()
+    .trim()
+    .normalize("NFKD")                 // handle accents
+    .replace(/[\u0300-\u036f]/g, "")   // remove diacritics
+    .replace(/[^a-z0-9\s-]/g, "")      // remove unsafe chars
+    .replace(/\s+/g, "-")              // spaces → hyphens
+    .replace(/-+/g, "-");              // collapse dashes
+}
+
+// Ensures the slug is unique by appending a counter if necessary.
+async function generateUniqueSlug(title: string) {
+  const base = makeSlug(title);
+
+  if (!base) return "";
+
+  let slug = base;
+  let count = 1;
+
+  while (await prisma.post.findUnique({ where: { slug } })) {
+    slug = `${base}-${count++}`;
+  }
+
+  return slug;
+}
+
 // Handles the creation of a post.
 export async function createPost(formData: FormData) {
-  try {
-    // Check if title and content is actually filled out.
-    if (formData.get("title")?.toString().trim().length === 0 || formData.get("content")?.toString().trim().length === 0) {
-      throw new Error("Title or content is blank.");
-    }
-    // Otherwise create post.
-    await prisma.post.create({
-      data: {
-        title: formData.get("title") as string,
-        slug: (formData.get("title") as string).replace(/\s+/g, "-").toLowerCase(),
-        content: formData.get("content") as string,
-        published: true,
-        author: {
-          connectOrCreate: {
-            where: {
-              email: "hellojjlin@gmail.com"
-            },
-            create: {
-              email: "hellojjlin@gmail.com",
-              hashedPassword: "abcdefg",
-            },
-          }
-        },
-      }
-    });
-    // automatically refreshes posts page when this function is ran
-    revalidatePath("/");
-  } catch (e) {
-    console.error("createPost failed:", e);
-  }
+  // Ensure the user is signed in
+  const session = await auth();
+  const email = session?.user?.email;
+  const name = session?.user?.name;
+  if (!email) throw new Error("You must be signed in to create a post.");
+
+  const rawTitle = String(formData.get("title") ?? "");
+  const rawContent = String(formData.get("content") ?? "");
+  const title = rawTitle.trim();
+  const content = rawContent.trim();
+  const generatedSlug = await generateUniqueSlug(title);
+  if (!generatedSlug) throw new Error("Could not generate a valid slug from the title.");
+
+  // Handles empty title or content
+  if (title.length === 0) throw new Error("Title cannot be empty.");
+  if (content.length === 0) throw new Error("Content cannot be empty.");
+
+  const user = await prisma.user.upsert({
+    where: { email },
+    update: { name },
+    create: { email, name },
+  });
+
+  await prisma.post.create({
+    data: {
+      title,
+      content,
+      slug: await generateUniqueSlug(title),
+      authorId: user.id,
+    },
+  });
+
+  revalidatePath("/");
 }
 
 // Handles editing a post. Needs id as an identifier.
