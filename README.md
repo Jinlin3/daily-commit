@@ -14,5 +14,6 @@ CS majors have it rough right now, especially in this market. This tracker helps
 ## To-Do
 - Change schema.prisma to match the daily goals (should be just posts I think) ✅
 - Create new entry creation form with sliders ✅
-- Handle entry creation with server actions
-- TBD...
+- Handle entry creation with server actions ✅
+- Beautify UI
+- Search up friends and see their history???
