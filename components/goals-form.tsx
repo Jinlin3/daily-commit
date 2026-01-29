@@ -3,13 +3,22 @@
 import { useState } from "react";
 import { submitGoals } from "@/actions/actions";
 
-export default function GoalsForm() {
-  const [jobs, setJobs] = useState(5);
-  const [leetcode, setLeetcode] = useState(5);
-  const [projectHours, setProjectHours] = useState(5);
+type GoalsFormProps = {
+  initialApplications: number;
+  initialLeetcode: number;
+  initialProjectHours: number;
+}
 
+export default function GoalsForm({
+  initialApplications,
+  initialLeetcode,
+  initialProjectHours,
+}: GoalsFormProps) {
+  const [jobs, setJobs] = useState(initialApplications);
+  const [leetcode, setLeetcode] = useState(initialLeetcode);
+  const [projectHours, setProjectHours] = useState(initialProjectHours);
   return (
-    <form className="min-w-100 max-w-175 flex flex-col" action={submitGoals}>
+    <form className="min-w-100 max-w-175 flex flex-col text-center" action={submitGoals}>
       <label htmlFor="job-applications">
         Job Applications: <strong>{jobs}</strong>
       </label>

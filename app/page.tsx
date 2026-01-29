@@ -49,35 +49,47 @@ export default async function Home() {
   const display = user?.name ?? user?.email;
 
   return (
-    <main className="flex flex-col items-center gap-y-5 pt-10 text-center">
+    <main className="flex flex-col items-center gap-y-10 pt-10 text-center">
 
       <div>
-        <div className="font-bold">Current Goals for {user.email}:</div>
-        <div>Job Applications: {goals?.applications ?? "—"}</div>
-        <div>Leetcode Problems: {goals?.leetcode ?? "—"}</div>
-        <div>Project Hours: {goals?.projectHours ?? "—"}</div>
+        <div className="font-bold">{user.email}</div>
       </div>
       
       {goals ? (
-        <EntryForm />
+        <EntryForm goals={goals} />
       ) : (
         <div className="text-lg italic">Please set your goals to log your progress.</div>
       )}
 
       {entryCount > 0 && (
-        <>
-          <h1 className="text-3xl font-semibold">Submission History</h1>
-          <div className="border-t border-b border-black/10 flex flex-col w-full max-w-3xl">
-            {entries.map((entry) => (
-              <div key={entry.id} className="flex flex-col">
-                <span>Date: {new Date(entry.date).toDateString()}</span>
-                <span>Job Applications: {entry.applications}</span>
-                <span>Leetcode Problems: {entry.leetcode}</span>
-                <span>Project Hours: {entry.projectHours}</span>
-              </div>
-            ))}
+        <div className="mb-10 w-full max-w-2xl">
+          <h1 className="text-3xl font-semibold mb-5">Submission History</h1>
+          <div className="flex flex-col divide-y divide-black/10">
+            {entries.map((entry) => {
+              const hits = [
+                entry.applications >= goals!.applications,
+                entry.leetcode >= goals!.leetcode,
+                entry.projectHours >= goals!.projectHours,
+              ];
+              const hitCount = hits.filter(Boolean).length;
+              let bgClass = "bg-red-300";
+              if (hitCount === hits.length) {
+                bgClass = "bg-green-300";
+              } else if (hitCount > 0) {
+                bgClass = "bg-yellow-200";
+              }
+            
+              return (
+                <div key={entry.id} className={`flex flex-col py-2 gap-y-1 px-4 rounded-sm ${bgClass}`}>
+                  <span className="italic">Date: {new Date(entry.date).toLocaleDateString()}</span>
+                  <span>Job Applications: {entry.applications}</span>
+                  <span>Leetcode Problems: {entry.leetcode}</span>
+                  <span>Project Hours: {entry.projectHours}</span>
+                </div>
+              );
+            })}
           </div>
-        </>
+        </div>
       )}
 
     </main>

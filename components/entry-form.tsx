@@ -1,16 +1,24 @@
 "use client";
+import { submitEntry } from "@/actions/actions";
 import { useState } from "react";
 
-export default function PostForm() {
-  const [jobs, setJobs] = useState(5);
-  const [leetcode, setLeetcode] = useState(5);
-  const [projectHours, setProjectHours] = useState(5);
+type Goals = {
+    applications: number;
+    leetcode: number;
+    projectHours: number;
+  }
+
+export default function EntryForm({ goals }: {  goals: Goals }) {
+
+  const [jobs, setJobs] = useState(goals.applications);
+  const [leetcode, setLeetcode] = useState(goals.leetcode);
+  const [projectHours, setProjectHours] = useState(goals.projectHours);
   const today = new Date().toLocaleDateString();
 
   return (
-    <>
-      <h1 className="font-bold text-2xl">What did you do today on {today}?</h1>
-      <form className="min-w-100 max-w-175 flex flex-col">
+    <div>
+      <h1 className="font-semibold text-3xl mb-5">Commit for {today}</h1>
+      <form className="min-w-100 max-w-175 flex flex-col" action={submitEntry}>
         <label htmlFor="job-applications">
           Job Applications: <strong>{jobs}</strong>
         </label>
@@ -58,6 +66,6 @@ export default function PostForm() {
   
         <button className="bg-blue-400 rounded-sm py-2 hover:bg-blue-500 text-white cursor-pointer" type="submit">Submit</button>
       </form>
-    </>
+    </div>
   );
 }
