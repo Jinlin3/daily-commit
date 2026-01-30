@@ -1,4 +1,4 @@
-# Dev Daily (CS Job Search Tracker)
+# Daily Commit (CS Job Search Tracker)
 CS majors have it rough right now, especially in this market. This tracker helps you stay consistent by logging what you did each day and showing whether you hit your goals.
 ## What it does
 - Set **daily goals** for:
