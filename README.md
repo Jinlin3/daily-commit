@@ -19,3 +19,6 @@ CS majors have it rough right now, especially in this market. This tracker helps
 - Allow the graceful deletion of entries
 - Search up friends and see their history???
 - Make the UI beautiful
+  - Change font ✅
+  - Change color scheme
+  - Change navbar

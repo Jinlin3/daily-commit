@@ -22,7 +22,7 @@ export default async function GoalsPage() {
 
   return (
     <main className="flex flex-col items-center gap-y-6 mt-10">
-      <h1 className="text-2xl font-bold">Set your Daily Goals</h1>
+      <h1 className="text-3xl font-semibold">Set your Daily Goals</h1>
       <GoalsForm
         initialApplications={goals!.applications}
         initialLeetcode={goals!.leetcode}

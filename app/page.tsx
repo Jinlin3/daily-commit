@@ -59,7 +59,7 @@ export default async function Home() {
 
       {entryCount > 0 && (
         <div className="mb-10 w-full max-w-2xl">
-          <h1 className="text-3xl font-semibold mb-5">Submission History</h1>
+          <h1 className="text-3xl font-semibold mb-5">Your History</h1>
           <div className="flex flex-col divide-y divide-black/10">
             {entries.map((entry) => {
               const hits = [
