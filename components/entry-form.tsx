@@ -20,7 +20,7 @@ export default function EntryForm({ goals }: {  goals: Goals }) {
 
   return (
     <div>
-      <h1 className="font-semibold text-3xl mb-5">Your Commit for {today}</h1>
+      <h1 className="font-semibold text-3xl mb-5">Commit for {today}</h1>
       <form className="min-w-100 max-w-175 flex flex-col" action={submitEntry}>
         <input 
           type="hidden" 

@@ -20,6 +20,9 @@ export default async function Navbar() {
           <Link href="/goals">
             Edit Goals
           </Link>
+          <Link href="/tutorial">
+            How to Use
+          </Link>
         </div>
         { /* Right Side */ }
         <div className="w-1/2 flex justify-end">
