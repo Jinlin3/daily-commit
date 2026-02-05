@@ -12,17 +12,11 @@ CS majors have it rough right now, especially in this market. This tracker helps
   - Yellow = partially met
   - Red = missed
 ## To-Do
-- Change schema.prisma to match the daily goals (should be just posts I think) ✅
-- Create new entry creation form with sliders ✅
-- Handle entry creation with server actions ✅
-- Rename to "Daily Commit" ✅
-- Allow the graceful deletion of entries
-- Search up friends and see their history??? ✅
-  - I need to change the navigation of the website. ✅
 - Make the UI beautiful
   - Change font ✅
   - Change color scheme
   - Change navbar
+- Make the website responsive (MAKE IT MOBILE FRIENDLY)
 ## Navigation
 - Home (Welcome Page? Maybe put tutorial in here.)
   - "Username" - Navigate to your User Page

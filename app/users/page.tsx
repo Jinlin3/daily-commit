@@ -1,5 +1,10 @@
+import UserSearch from "@/components/user-search";
+
 export default function UserSearchPage() {
   return (
-    <main>User Search Page</main>
+    <main className="mx-auto max-w-xl pt-10">
+      <h1 className="text-3xl font-semibold">Find a User</h1>
+      <UserSearch />
+    </main>
   )
 }
